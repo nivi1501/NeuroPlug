@@ -97,8 +97,7 @@ always @(posedge clk) begin
 				
 				
 				// Start encryption
-            ENCRYPT: begin
-				    
+            ENCRYPT: begin				    
 				    // Encryption is done, load new data if available
 					 if (total_compressed_data >= 128) begin
                     total_compressed_data <= total_compressed_data - 10'd128;

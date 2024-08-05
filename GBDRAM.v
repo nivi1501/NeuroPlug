@@ -54,7 +54,7 @@ module GBDRAM#(parameter binSize=400)
 		wire en_buffer_write = enc_done||noise_ready;
 
 		reg [15:0] w_data;
-		CompressBinBuffer CompressBuffer
+		CompressBinBuffer CompressBinBuffer2
 		   ( 
 				.clk(clk),
 			   .reset(rst),

@@ -34,17 +34,15 @@ module GB_Cluster
 			 input read_req_iact, 
 			 input read_req_psum,
 			 input read_req_wght,
-			 input read_req_psum_inter,
+			// input read_req_psum_inter,
 
 			 input write_en_iact, 
 			 input write_en_psum,
 			 input write_en_wght,
-
-			 
+	
 			 input [ADDR_BITWIDTH-1 : 0] r_addr_iact,
 			 input [ADDR_BITWIDTH-1 : 0] r_addr_psum,
 			 input [ADDR_BITWIDTH-1 : 0] r_addr_wght,
-			 input [ADDR_BITWIDTH-1 : 0] r_addr_psum_inter,
 			 input [ADDR_BITWIDTH-1 : 0] w_addr_iact,
 			 input [ADDR_BITWIDTH-1 : 0] w_addr_psum,
 			 input [ADDR_BITWIDTH-1 : 0] w_addr_wght,

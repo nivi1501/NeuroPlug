@@ -5,7 +5,7 @@
 // 
 // Create Date:    11:40:29 07/24/2024 
 // Design Name: 
-// Module Name:    router_west_iact 
+// Module Name:    router_val_iact 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -19,7 +19,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 
-module router_west_iact
+module router_input
 	#(
 		// parameter DATA_BITWIDTH = 16,
 		parameter DATA_BITWIDTH = 16,
@@ -39,16 +39,16 @@ module router_west_iact
 		input clk,
 		input reset,
 		
-		output [ADDR_BITWIDTH_GLB-1:0] west_addr_read,
-		output west_req_read,
+		output [ADDR_BITWIDTH_GLB-1:0] val_addr_read,
+		output val_req_read,
 
 		//Source ports
-		input [DATA_BITWIDTH-1:0] west_data_i,
-		input west_enable_i,
+		input [DATA_BITWIDTH-1:0] val_data_i,
+		input val_enable_i,
 		
 		//Destination ports
-		output  [DATA_BITWIDTH-1:0] west_data_o,
-		output  west_enable_o
+		output  [DATA_BITWIDTH-1:0] val_data_o,
+		output  val_enable_o
     );
 	reg [DATA_BITWIDTH-1:0] data_out;
 
@@ -58,7 +58,6 @@ module router_west_iact
 	assign load_spad_ctrl = load_spad_ctrl_0 & (~load_spad_ctrl_1);
 
 			
-	
 	always @(posedge clk)
 		if (reset)
 			begin 
@@ -73,9 +72,9 @@ module router_west_iact
 	
 	always@(*)
 	begin:data_switch
-		if(west_enable_i)
+		if(val_enable_i)
 		begin
-			data_out = west_data_i;
+			data_out = val_data_i;
 			load_spad_ctrl_c=1;
 			end
 		else
@@ -105,10 +104,10 @@ module router_west_iact
 	(	.clk(clk),
 		.reset(reset),
 		.r_data_glb_iact(data_out),
-		.r_addr_glb_iact(west_addr_read),
-		.read_req_glb_iact(west_req_read),
-		.w_data_spad(west_data_o),
-		.load_en_spad(west_enable_o),
+		.r_addr_glb_iact(val_addr_read),
+		.read_req_glb_iact(val_req_read),
+		.w_data_spad(val_data_o),
+		.load_en_spad(val_enable_o),
 		.load_spad_ctrl(load_spad_ctrl),
 		 .iact(1'b1)
 	);

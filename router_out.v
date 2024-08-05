@@ -5,7 +5,7 @@
 // 
 // Create Date:    11:40:29 07/24/2024 
 // Design Name: 
-// Module Name:    router_west_wght
+// Module Name:    router_val_wght
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -19,7 +19,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 
-module router_west_wght
+module router_wght
     #(
         parameter DATA_BITWIDTH = 16,
         parameter ADDR_BITWIDTH_GLB = 10,
@@ -34,13 +34,13 @@ module router_west_wght
     (
         input clk,
         input reset,
-        output [ADDR_BITWIDTH_GLB-1:0] west_addr_read,
-        output west_req_read,
-                // Interface with West
-        input [DATA_BITWIDTH-1:0] west_data_i,
-        input west_enable_i,
-        output [DATA_BITWIDTH-1:0] west_data_o,
-        output west_enable_o
+        output [ADDR_BITWIDTH_GLB-1:0] val_addr_read,
+        output val_req_read,
+                // Interface with val
+        input [DATA_BITWIDTH-1:0] val_data_i,
+        input val_enable_i,
+        output [DATA_BITWIDTH-1:0] val_data_o,
+        output val_enable_o
     );
     
     reg [DATA_BITWIDTH-1:0] data_out;
@@ -61,8 +61,8 @@ module router_west_wght
     end
     
     always @(*) begin
-			if (west_enable_i) begin
-            data_out = west_data_i;
+			if (val_enable_i) begin
+            data_out = val_data_i;
             load_spad_ctrl_c = 1;
         end  else begin 
             data_out = 16'h0000;
@@ -86,10 +86,10 @@ module router_west_wght
         .clk(clk),
         .reset(reset),
         .r_data_glb_iact(data_out),
-        .r_addr_glb_iact(west_addr_read),
-        .read_req_glb_iact(west_req_read),
-        .w_data_spad(west_data_o),
-        .load_en_spad(west_enable_o),
+        .r_addr_glb_iact(val_addr_read),
+        .read_req_glb_iact(val_req_read),
+        .w_data_spad(val_data_o),
+        .load_en_spad(val_enable_o),
         .load_spad_ctrl(load_spad_ctrl),
         .iact(1'b0)
     );

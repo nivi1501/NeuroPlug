@@ -59,53 +59,36 @@ module main_local
 	input [DATA_BITWIDTH-1:0] w_data_wght,
 	input [ADDR_BITWIDTH-1:0] w_addr_wght,
 	input [ADDR_BITWIDTH-1:0] r_addr_psum,
-	input [ADDR_BITWIDTH-1:0] r_addr_psum_inter,
-	input west_0_req_read_psum_inter,
-	input west_0_req_read_psum,
+
+	input val_0_req_read_psum,
 	output [DATA_BITWIDTH-1:0] r_data_psum,
 
 	
-	//ROUTER Interports
+	input val_enable_i_val_0_wght,
 
-	input west_enable_i_west_0_wght,
-
-	input west_enable_i_west_0_iact
-
-
+	input val_enable_i_val_0_iact
 	);
 
-	wire [ADDR_BITWIDTH_GLB-1:0] west_0_addr_read_wght;
+	wire [ADDR_BITWIDTH_GLB-1:0] val_0_addr_read_wght;
+	wire [ADDR_BITWIDTH_GLB-1:0] val_0_addr_read_iact;
+	wire [ADDR_BITWIDTH-1:0] val_addr_o_val_0_psum;
+	wire val_0_req_read_wght;
+	wire val_0_req_read_iact;
+	wire [DATA_BITWIDTH-1:0] val_data_i_val_0_wght;
+	wire [DATA_BITWIDTH-1:0] val_data_i_val_0_iact;
+	wire  val_enable_o_val_0_wght;
+	wire  val_enable_o_val_0_iact;
+	wire [DATA_BITWIDTH-1:0] val_data_o_val_0_iact;
+	wire [DATA_BITWIDTH-1:0] val_data_o_val_0_wght;
+	wire [DATA_BITWIDTH-1:0] val_data_o_val_0_psum;
+	wire val_enable_o_val_0_psum;
+	wire [DATA_BITWIDTH*X_dim-1:0] out_data_i_val_0_psum;
+	wire out_enable_i_val_0_psum;
+	wire [DATA_BITWIDTH*X_dim-1:0] out_data_o_val_0_psum;
 
-	wire [ADDR_BITWIDTH_GLB-1:0] west_0_addr_read_iact;
+	assign compute_done = out_enable_i_val_0_psum;
 
-	wire [ADDR_BITWIDTH-1:0] west_addr_o_west_0_psum;
-
-	wire west_0_req_read_wght;
-
-	wire west_0_req_read_iact;
-
-	wire [DATA_BITWIDTH-1:0] west_data_i_west_0_wght;
-
-	wire [DATA_BITWIDTH-1:0] west_data_i_west_0_iact;
-
-	wire  west_enable_o_west_0_wght;
-
-	wire  west_enable_o_west_0_iact;
-
-	wire [DATA_BITWIDTH-1:0] west_data_o_west_0_iact;
-
-	wire [DATA_BITWIDTH-1:0] west_data_o_west_0_wght;
-	
-
-	wire [DATA_BITWIDTH-1:0] west_data_o_west_0_psum;
-	wire west_enable_o_west_0_psum;
-	wire [DATA_BITWIDTH*X_dim-1:0] east_data_i_west_0_psum;
-	wire east_enable_i_west_0_psum;
-	wire [DATA_BITWIDTH*X_dim-1:0] east_data_o_west_0_psum;
-
-	assign compute_done = east_enable_i_west_0_psum;
-
-	router_cluster_wpsum
+	router_cluster
 	#(
 		.DATA_BITWIDTH(DATA_BITWIDTH),
 		.ADDR_BITWIDTH(ADDR_BITWIDTH),
@@ -127,26 +110,26 @@ module main_local
 		.clk(clk),
 		.reset(reset),
 
-		.west_0_addr_read_iact(west_0_addr_read_iact),
-		.west_0_req_read_iact(west_0_req_read_iact),
-		.west_data_i_west_0_iact(west_data_i_west_0_iact),
-		.west_enable_i_west_0_iact(west_enable_i_west_0_iact),
-		.west_data_o_west_0_iact(west_data_o_west_0_iact),
-		.west_enable_o_west_0_iact(west_enable_o_west_0_iact),
+		.val_0_addr_read_iact(val_0_addr_read_iact),
+		.val_0_req_read_iact(val_0_req_read_iact),
+		.val_data_i_val_0_iact(val_data_i_val_0_iact),
+		.val_enable_i_val_0_iact(val_enable_i_val_0_iact),
+		.val_data_o_val_0_iact(val_data_o_val_0_iact),
+		.val_enable_o_val_0_iact(val_enable_o_val_0_iact),
 
-		.west_0_addr_read_wght(west_0_addr_read_wght),
-		.west_0_req_read_wght(west_0_req_read_wght),
-		.west_data_i_west_0_wght(west_data_i_west_0_wght),
-		.west_enable_i_west_0_wght(west_enable_i_west_0_wght),
-		.west_data_o_west_0_wght(west_data_o_west_0_wght),
-		.west_enable_o_west_0_wght(west_enable_o_west_0_wght),
+		.val_0_addr_read_wght(val_0_addr_read_wght),
+		.val_0_req_read_wght(val_0_req_read_wght),
+		.val_data_i_val_0_wght(val_data_i_val_0_wght),
+		.val_enable_i_val_0_wght(val_enable_i_val_0_wght),
+		.val_data_o_val_0_wght(val_data_o_val_0_wght),
+		.val_enable_o_val_0_wght(val_enable_o_val_0_wght),
 
-		.west_data_o_west_0_psum(west_data_o_west_0_psum),
-		.west_enable_o_west_0_psum(west_enable_o_west_0_psum),
-		.east_data_i_west_0_psum(east_data_i_west_0_psum),
-		.east_enable_i_west_0_psum(east_enable_i_west_0_psum),
-		.east_data_o_west_0_psum(east_data_o_west_0_psum),
-		.west_addr_o_west_0_psum(west_addr_o_west_0_psum)
+		.val_data_o_val_0_psum(val_data_o_val_0_psum),
+		.val_enable_o_val_0_psum(val_enable_o_val_0_psum),
+		.out_data_i_val_0_psum(out_data_i_val_0_psum),
+		.out_enable_i_val_0_psum(out_enable_i_val_0_psum),
+		.out_data_o_val_0_psum(out_data_o_val_0_psum),
+		.val_addr_o_val_0_psum(val_addr_o_val_0_psum)
 
 		);
 		
@@ -165,35 +148,27 @@ module main_local
 			(
 				.clk(clk),   //TestBench/Controller
 				.reset(reset),  //TestBench/Controller
-				
+	
 				//Signals for reading from GLB
-				.read_req_iact(west_0_req_read_iact),
-				.read_req_psum(west_0_req_read_psum), //Read by testbench/controller
-				.read_req_wght(west_0_req_read_wght),
-				.read_req_psum_inter(west_0_req_read_psum_inter),
-
-			    .r_data_iact(west_data_i_west_0_iact),
-			    .r_data_psum(r_data_psum), //Read by testbench/controller
-				.r_data_wght(west_data_i_west_0_wght),
-
-				.r_addr_iact(west_0_addr_read_iact),
-			    .r_addr_psum(r_addr_psum), //testbench for reading final psums
-				.r_addr_wght(west_0_addr_read_wght),
-				.r_addr_psum_inter(r_addr_psum_inter),
-				
-				//Signals for writing to GLB
-			    .w_addr_iact(w_addr_iact), //testbench for writing
-			    .w_addr_psum(west_addr_o_west_0_psum),
-				.w_addr_wght(w_addr_wght), //testbench for writing
+				.read_req_iact(val_0_req_read_iact),
+				.read_req_psum(val_0_req_read_psum), 
+				.read_req_wght(val_0_req_read_wght),
+				.r_data_iact(val_data_i_val_0_iact),
+			    .r_data_psum(r_data_psum), 
+				.r_data_wght(val_data_i_val_0_wght),
+				.r_addr_iact(val_0_addr_read_iact),
+			    .r_addr_psum(r_addr_psum), 
+				.r_addr_wght(val_0_addr_read_wght),
+				.w_addr_iact(w_addr_iact), 
+			    .w_addr_psum(val_addr_o_val_0_psum),
+				.w_addr_wght(w_addr_wght),
  
-			    .w_data_iact(w_data_iact), //testbench for writing
-				.w_data_psum(west_data_o_west_0_psum),
-				.w_data_wght(w_data_wght), //testbench for writing
-
-				.write_en_iact(write_en_iact), //testbench for writing
-				.write_en_psum(west_enable_o_west_0_psum),
-				.write_en_wght(write_en_wght) //testbench for writing
-			
+			    .w_data_iact(w_data_iact), 
+				.w_data_psum(val_data_o_val_0_psum),
+				.w_data_wght(w_data_wght), 
+				.write_en_iact(write_en_iact), 
+				.write_en_psum(val_enable_o_val_0_psum),
+				.write_en_wght(write_en_wght) 			
 			);
 	
 	
@@ -215,21 +190,18 @@ module main_local
 					.PSUM_ADDR(PSUM_ADDR)
 
     			)
-	pe_cluster_west_0
+	pe_cluster
     			(
 					.clk(clk),
-				   .reset(reset),
-					
-				   .act_in(west_data_o_west_0_iact),
-				   .filt_in(west_data_o_west_0_wght),
-				   .pe_before(east_data_o_west_0_psum),
-
-					.load_en_wght(west_enable_o_west_0_wght),
-					.load_en_act(west_enable_o_west_0_iact),
-					
+				   .reset(reset),					
+				   .act_in(val_data_o_val_0_iact),
+				   .filt_in(val_data_o_val_0_wght),
+				   .pe_before(out_data_o_val_0_psum),
+					.load_en_wght(val_enable_o_val_0_wght),
+					.load_en_act(val_enable_o_val_0_iact),					
 					.start(start),
-               .pe_out(east_data_i_west_0_psum),
-					.compute_done(east_enable_i_west_0_psum),
+               .pe_out(out_data_i_val_0_psum),
+					.compute_done(out_enable_i_val_0_psum),
 					.load_done(load_done)
     			);
 	

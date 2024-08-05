@@ -50,7 +50,6 @@ module router_psum #( parameter DATA_BITWIDTH = 16,
 					);
 				
 					
-		// enum reg [2:0] {IDLE=3'b000, WRITE_GLB=3'b001, READ_PSUM=3'b010} state;
 		reg [2:0] state;		
 		localparam IDLE=3'b000;
 		localparam WRITE_GLB=3'b001;
@@ -60,7 +59,6 @@ module router_psum #( parameter DATA_BITWIDTH = 16,
 		reg [2:0] iter;
 		
 		always@(posedge clk) begin
-//			$display("State of router_psum: %s", state.name());
 			if(reset) begin
 				w_addr_glb_psum <= PSUM_LOAD_ADDR;
 				psum_count <= 0;
@@ -71,7 +69,6 @@ module router_psum #( parameter DATA_BITWIDTH = 16,
 				case(state)
 					IDLE:begin
 						if(write_psum_ctrl) begin
-							//write_en_glb_psum <= 1;
 							state <= READ_PSUM;
 						end else begin
 							psum_count <= 0;
@@ -83,14 +80,12 @@ module router_psum #( parameter DATA_BITWIDTH = 16,
 					
 					READ_PSUM:begin
 						pe_psum <= r_data_spad_psum;
-//						$display("Psum read in router:%d",pe_psum[0:kernel_size-1]);
 						psum_count <= 0;
 						state <= WRITE_GLB;
 					end
 					
 					WRITE_GLB:begin
 						write_en_glb_psum <= 1;
-//						$display("Psum written to address %d; Iter is %d",w_addr_glb_psum, iter);
 						if(psum_count == (X_dim-1)) begin
 							w_data_glb_psum <= pe_psum[(psum_count+1)*DATA_BITWIDTH-1 -: DATA_BITWIDTH];
 							psum_count <= 1'b0;
