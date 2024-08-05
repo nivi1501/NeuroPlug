@@ -34,9 +34,9 @@ module GBDRAM#(parameter binSize=400)
 		wire enc_done, noise_ready;
 		reg [15:0] noise;
 		wire [15:0] noise_val;
-
+      reg [255:0] i_data_cte;
 		// Perform CTE
-		CTE CTEEngine(i_data,key,rst,clk,o_data,en,enc_done,hold);
+		CTE CTEEngine(i_data_cte,key,rst,clk,o_data,en,enc_done,hold);
 		// o_data (compressed and encrypted data is written to the global buffer)
 
 		// Noise generation module
@@ -54,7 +54,7 @@ module GBDRAM#(parameter binSize=400)
 		wire en_buffer_write = enc_done||noise_ready;
 
 		reg [15:0] w_data;
-		CompressBinBuffer CompressBinBuffer2
+		/*CompressBinBuffer CompressBinBuffer2
 		   ( 
 				.clk(clk),
 			   .reset(rst),
@@ -64,7 +64,7 @@ module GBDRAM#(parameter binSize=400)
 			   .w_addr(w_addr),
 			   .w_data(w_data),
 			   .r_data()
-		);
+		);*/
 
 		// Whenever data is encrypted and send to be written to GB, increment the count of
 		// the transferred data
@@ -88,7 +88,7 @@ module GBDRAM#(parameter binSize=400)
 						noise <= 0;
 				end
 				else if (en_noise==1) begin
-				      w_data <= 129; // For testing dummy values given
+				      //w_data <= 129; // For testing dummy values given
 						if (noise_ready)
 							 noise <= noise_val;
 						else
@@ -99,6 +99,26 @@ module GBDRAM#(parameter binSize=400)
  							 noise <= 0;
 				end
 		end
+		
+		
+	   // Update the noise register only when askd by the user to add noise.
+		always@(posedge clk) begin
+				if(rst) begin
+						i_data_cte <= 0;
+				end
+				// if compression enable for dummy data
+				else if (en_noise==1 && en) begin
+						if (noise_ready)
+							 i_data_cte <= 129; // for testing dummy data 
+						else
+							 i_data_cte <= 0;
+						end	 
+				// compression enable for 		
+				else if (en && en_noise==0) begin
+				      	 i_data_cte <= i_data;
+				end
+		end
+		
 
 		// binWrite to DRAM is active only when all the content is written
 		assign binWrite = (dataReadFromGB >= binSize)? 1:0;
